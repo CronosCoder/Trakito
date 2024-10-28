@@ -27,6 +27,7 @@ REMOTE_APPS = [
 ]
 
 LOCAL_APPS = [
+    "user"
     "core",
     "todo"
 ]
