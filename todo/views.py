@@ -52,7 +52,7 @@ class TodoUpdateStatusAPIView(views.APIView):
     service_class = TodoService()
 
     def patch(self, request, *args, **kwargs):
-        todo = self.service_class.get(id=kwargs.get("id"))
+        todo = self.service_class.get(id=kwargs.get('id', None))
         serializer = self.serializer_class(todo, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
