@@ -27,6 +27,7 @@ REMOTE_APPS = [
 ]
 
 LOCAL_APPS = [
+    "user",
     "core",
     "todo"
 ]
@@ -44,6 +45,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'trakito.urls'
+AUTH_USER_MODEL = "user.User"
 
 TEMPLATES = [
     {
@@ -99,3 +101,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,  
+}
