@@ -1,5 +1,6 @@
 from rest_framework import views, status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from todo.services import TodoService
 from todo.serializers import (
     TodoSerializer,
@@ -10,13 +11,14 @@ from todo.serializers import (
 
 
 class TodoListCreateAPIView(views.APIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = TodoSerializer
     list_serializer_class = TodoListSerializer
     detail_serializer_class = TodoDetailSerializer
     service_class = TodoService()
 
     def get(self, request):
-        todos = self.service_class.all()
+        todos = self.service_class.all(user=request.user)
         serializer = self.list_serializer_class(todos, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -28,6 +30,7 @@ class TodoListCreateAPIView(views.APIView):
     
 
 class TodoRetrieveUpdateAPIView(views.APIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = TodoSerializer
     list_serializer_class = TodoListSerializer
     detail_serializer_class = TodoDetailSerializer
@@ -45,6 +48,7 @@ class TodoRetrieveUpdateAPIView(views.APIView):
         serializer.is_valid(raise_exception=True)
         instance = self.service_class.update(instance=todo, validated_data=serializer.validated_data,request=request)
         return Response(self.detail_serializer_class(instance).data,status=status.HTTP_200_OK)
+    
     
 
 

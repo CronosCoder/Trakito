@@ -27,7 +27,7 @@ REMOTE_APPS = [
 ]
 
 LOCAL_APPS = [
-    "user"
+    "user",
     "core",
     "todo"
 ]
@@ -45,6 +45,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'trakito.urls'
+AUTH_USER_MODEL = "user.User"
 
 TEMPLATES = [
     {
