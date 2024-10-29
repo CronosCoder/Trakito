@@ -23,4 +23,4 @@ class TodoUpdateStatusSerializer(serializers.ModelSerializer):
 class TodoDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
-        fields = "__all__"
+        exclude=["user"]
