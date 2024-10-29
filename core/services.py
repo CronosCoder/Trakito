@@ -15,6 +15,8 @@ class BaseService:
 
     def create(self, validated_data, **kwargs):
         validated_data = self.prepare_data(validated_data)
+        request = kwargs.pop("request")
+        validated_data["user"] = request.user
         model_class = self.get_model_class()
         instance = model_class.objects.create(**validated_data)
         return instance
