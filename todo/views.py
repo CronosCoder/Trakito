@@ -8,19 +8,23 @@ from todo.serializers import (
     TodoListSerializer,
     TodoUpdateStatusSerializer
 )
+from core.paginations import Pagination
 
 
 class TodoListCreateAPIView(views.APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = TodoSerializer
+    pagination_class = Pagination
     list_serializer_class = TodoListSerializer
     detail_serializer_class = TodoDetailSerializer
     service_class = TodoService()
 
     def get(self, request):
         todos = self.service_class.all(user=request.user)
-        serializer = self.list_serializer_class(todos, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginator = self.pagination_class()
+        paginated_todos = paginator.paginate_queryset(todos, request)
+        response = self.list_serializer_class(paginated_todos, many=True).data
+        return paginator.get_paginated_response(response)
 
     def post(self,request):
         serializer = self.serializer_class(data=request.data)
