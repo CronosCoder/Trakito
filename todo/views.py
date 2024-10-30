@@ -55,12 +55,20 @@ class TodoRetrieveUpdateAPIView(views.APIView):
     
     
 
-
 class TodoUpdateStatusAPIView(views.APIView):
-
+    serializer_class = TodoUpdateStatusSerializer
+    detail_serializer_class = TodoDetailSerializer
+    service_class = TodoService()
 
     def patch(self, request, *args, **kwargs):
-        pass
+        todo = self.service_class.get(id=kwargs.get('id', None))
+        serializer = self.serializer_class(todo, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
 
-
+        response = self.service_class.update_status(
+            instance = todo,
+            validated_data = serializer.validated_data,
+            request = request
+        )
+        return Response(self.detail_serializer_class(response).data,status=status.HTTP_200_OK)
 
