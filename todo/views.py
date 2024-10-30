@@ -8,7 +8,7 @@ from todo.serializers import (
     TodoListSerializer,
     TodoUpdateStatusSerializer
 )
-from core.paginations import Pagination
+from core.paginators import Pagination
 
 
 class TodoListCreateAPIView(views.APIView):
