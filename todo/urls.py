@@ -1,9 +1,9 @@
 from django.urls import path, include
-from .views import *
-# from todo.views import (
-#     TodoListCreateAPIView,
-#     TodoRetrieveUpdateAPIView 
-# )
+from todo.views import (
+    TodoListCreateAPIView,
+    TodoRetrieveUpdateAPIView ,
+    TodoUpdateStatusAPIView,
+)
 
 urlpatterns = [
     path("todos/", TodoListCreateAPIView.as_view(), name="todo_list_create"),
