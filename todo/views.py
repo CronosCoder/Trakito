@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import views, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -9,6 +10,7 @@ from todo.serializers import (
     TodoUpdateStatusSerializer
 )
 from core.paginators import Pagination
+from .filters import TodoFilter
 
 
 class TodoListCreateAPIView(views.APIView):
@@ -18,11 +20,14 @@ class TodoListCreateAPIView(views.APIView):
     list_serializer_class = TodoListSerializer
     detail_serializer_class = TodoDetailSerializer
     service_class = TodoService()
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = TodoFilter
 
     def get(self, request):
         todos = self.service_class.all(user=request.user)
+        filtered_todos = TodoFilter(request.GET, queryset=todos).qs
         paginator = self.pagination_class()
-        paginated_todos = paginator.paginate_queryset(todos, request)
+        paginated_todos = paginator.paginate_queryset(filtered_todos, request)
         response = self.list_serializer_class(paginated_todos, many=True).data
         return paginator.get_paginated_response(response)
 
